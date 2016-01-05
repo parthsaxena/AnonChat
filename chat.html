@@ -1,0 +1,62 @@
+<html>
+  <head>
+    <title>AnonChat</title>
+    <style>
+      * { margin: 0; padding: 0; box-sizing: border-box; }
+      body { font: 13px Helvetica, Arial; }
+      form { background: #000; padding: 3px; position: fixed; bottom: 0; width: 100%; }
+      form input { border: 0; padding: 10px; width: 90%; margin-right: .5%; }
+      form button { width: 9%; background: rgb(130, 224, 255); border: none; padding: 10px; }
+      #current_users { margin: 0; padding-left: 10; padding-top:10; }
+      #made_by { margin: 0; padding-left: 10; padding-top: 50; }
+      #messages { list-style-type: none; margin: 0; padding: 0; padding-top:100px; }
+      #messages li { padding: 5px 10px; }
+      #messages li:nth-child(odd) { background: #eee; }
+    </style>
+  </head>
+
+  <body>
+
+    <h2 id="current_users">There are currently 0 users on AnonChat</h2>
+    <h2 id="made_by">Made by Parth Saxena</h2>
+    <ul id="messages"></ul>
+    <form action="">
+      <input id="m" autocomplete="off" /><button>Send</button>
+    </form>
+    <script src="/socket.io/socket.io.js"></script>
+    <script src="http://code.jquery.com/jquery-1.11.1.js"></script>
+    <script>
+      var socket = io();
+
+      function getCookie(cname) {
+          var name = cname + "=";
+          var ca = document.cookie.split(';');
+          for(var i=0; i<ca.length; i++) {
+              var c = ca[i];
+              while (c.charAt(0)==' ') c = c.substring(1);
+              if (c.indexOf(name) == 0) return c.substring(name.length,c.length);
+          }
+          return "";
+      }
+
+      $('form').submit(function(){
+        var userNickname = getCookie("nickname");
+
+        var data = [];
+        var message = document.getElementById('m').value;
+        data.push([message, userNickname]);
+
+        socket.emit('chat message', data);
+        $('#m').val('');
+        return false;
+      });
+      socket.on('chat message', function(msg){
+        $('#messages').append($('<li>').html("<p>" + msg[0][0] + " <i> - " + msg[0][1] + "</i></p>"));
+      });
+
+      socket.on('new connection', function(persons){
+        $('#current_users').text("There are currently " + persons + " users on AnonChat.");
+      });
+    </script>
+  </body>
+</html>

@@ -1,0 +1,31 @@
+<html>
+
+  <head>
+    <h1>Welcome to AnonChat</h1>
+
+    <script>
+      function proceed() {
+        var nickname = document.getElementById("nickname").value;
+
+        document.cookie="nickname=" + nickname;
+
+        window.location.href = "chat.html";
+      }
+    </script>
+
+  </head>
+
+  <body>
+    <h2><i>AnonChat is a 100% fully anonymous chatroom. You can say whatever you would like, there are no rules.</i></h2>
+    <h2><i>Messages are not recorded in ANY way.</i></h2>
+
+    <input type="text" id="nickname" placeholder="Nickname (Optional)">
+    <button onclick="proceed()">Proceed to Chat</button>
+
+    <h3>About Nicknames</h3>
+    <h4>Users can optionally use nicknames. Nicknames are stored in cookies. If you select to use no nickname, your messages will show as by "Anonymous".</h4>
+
+    <h2>Made By Parth Saxena</h2>
+  </body>
+
+</html>
